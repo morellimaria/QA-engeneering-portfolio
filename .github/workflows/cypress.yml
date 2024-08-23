@@ -16,10 +16,18 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: '22.6.0' # Укажите версию Node.js, которая используется в вашем проекте
+          node-version: '22.6.0' 
+
+      - name: Cache npm modules
+        uses: actions/cache@v3
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
 
       - name: Install dependencies
-        run: npm install # Установите зависимости; используйте yarn или pnpm, если они применимы
+        run: npm install --verbose # Подробный вывод для диагностики
 
       - name: Cypress run
         uses: cypress-io/github-action@v6
